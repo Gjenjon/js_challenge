@@ -1,0 +1,914 @@
+
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Train+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+    
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <div class="conts-body">
+            <div class="logo">
+                Trading Dashbord
+            </div>
+
+            <button class="hamburger">
+                
+              <span class="hamburger_bar"></span>
+              <span class="hamburger_bar"></span>
+              <span class="hamburger_bar"></span>
+            </button>
+          
+            <nav class="nav">
+              <ul class="nav-list">
+                <li class="nav-item"><a href="">取引登録</a></li>
+                <li class="nav-item"><a href="">倉庫登録</a></li>
+                <li class="nav-item"><a href="">ナビゲーション3</a></li>
+                <li class="nav-item"><a href="">ナビゲーション4</a></li>
+                <li class="nav-item"><a href="">設定</a></li>
+              </ul>
+            </nav>
+        </div>
+
+
+    </header>
+
+    <main class="main">
+        <section id="transactions">
+            <div class="transactions-container">
+                <div class="title">
+                    ○ 登録取引
+                </div>
+                <div class="transactionTable-container">
+                    <table id="transactions-table" class="transactions-table"></table>
+                </div>
+            </div>
+
+        </section>
+
+        <div class="strageCapacity-container">
+            <div class="title">
+                ○ 取引ステータス
+            </div>
+
+            <div class="status-container">
+                <div class="purchase box">
+                    <div class="subTitle">
+                        受渡前
+                    </div>
+                    <div class="icon-container ship">
+                        
+                    </div>
+
+                    <div class="capacity-container">
+                        <table id="purchase-table" class="status-table"></table>
+                    </div>
+                </div>
+  
+                <div class="stock box">
+                    <div class="subTitle">
+                        保管
+                    </div>
+                    
+                    <div class="icon-container tank">
+                    </div>
+
+                    <div class="capacity-container">
+                        <table id="capacity-table" class="stock-table"></table>
+                    </div>
+
+                </div>
+
+                <div class="sell box">
+                    <div class="subTitle">
+                        受渡後
+                    </div>
+                    <div class="icon-container customer">
+                        
+                    </div>
+
+                    <div class="capacity-container">
+                        <table id="sell-table" class="status-table"></table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- シミュレーション -->
+            <div class="simulation-container">
+                <div class="title">
+                    ○ シミュレーション
+                </div>
+
+                <div class="simControler">
+                    <div class="select-SimNum" id="selSimNum">
+                        <label for="simNum">シミュレーション数：</label>
+                        <select name="simNum" id="simNum"></select>
+                    </div>
+    
+                    <div class="select-SimNum" id="selSimNum">
+                        <button type="button" class="exeSim" id="exeSim">実行</button>
+                    </div>    
+                </div>
+
+                <div class="input-container" id="input-container"></div>
+
+
+                <div class="result-container transactions-table" id="result-container">
+
+                </div>
+
+            </div>
+
+        
+        </div>
+        
+        <section id="middle">
+            <div class="middle">
+                <div class="title">
+                    ○ 情報
+                </div>
+                <div class="middle-container">
+                    
+
+                    <div class="weather-container">
+                        <iframe width="512" height="450" src="https://embed.windy.com/embed2.html?lat=35.696&lon=139.634&detailLat=35.696&detailLon=139.634&width=650&height=450&zoom=5&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+                    </div>
+
+                    <div class="marineTrafic-container">
+                        <script type="text/javascript">
+                            width='100%';		// the width of the embedded map in pixels or percentage
+                            height='450';		// the height of the embedded map in pixels or percentage
+                            border='1';		// the width of the border around the map (zero means no border)
+                            shownames='false';	// to display ship names on the map (true or false)
+                            latitude='35.696';	// the latitude of the center of the map, in decimal degrees
+                            longitude='139.634';	// the longitude of the center of the map, in decimal degrees
+                            zoom='5';		// the zoom level of the map (values between 2 and 17)
+                            maptype='1';		// use 0 for Normal Map, 1 for Satellite
+                            trackvessel='0';	// MMSI of a vessel (note: vessel will be displayed only if within range of the system) - overrides "zoom" option
+                            fleet='';		// the registered email address of a user-defined fleet (user's default fleet is used) - overrides "zoom" option
+                        </script>
+                        <script type="text/javascript" src="//www.marinetraffic.com/js/embed.js"></script>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="news">
+            <div class="news">
+                <div class="title">
+                    ○ News
+                </div>
+
+                <div class="news-container">
+                    
+
+                    <article class="new">
+                        <div class="XMLSampleRequest">
+                    
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+
+    </footer>
+    
+
+    
+    <script type="module">
+        // データベース操作
+        // settings             
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+        import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved, get}
+                        from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.14.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+        
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app); // connect to realtime db
+
+        const dbTransaction = ref(db, "transaction"); // 
+        const dbStrage = ref(db, "strage"); // 
+
+        const tranCol = ['登録日', 'ID','商品','規格','買先','ETD','買値','売先','ETA','売値','数量','単位','ステータス','船名','詳細','編集'];
+        const tranData = ['a', 'b','yyy','B','e','2022/12/5','g','h','2022/12/30','j','300','kg','l','m','n','o'];
+
+        let inputTranData = {};
+        for(let i = 0; i < tranCol.length; i++){
+            inputTranData[tranCol[i]] = tranData[i];
+        };
+        // const tmpDb = push(dbTransaction);
+        // set(tmpDb, inputTranData); 
+
+
+        const strageCol = ['登録日', 'ID','倉庫','規格','容量','単位', '商品'];
+        const strageData = ['a', 'b','YYY','A','1000','kg'];
+
+        let inputStrageData = {};
+        for(let i = 0; i < strageCol.length; i++){
+            inputStrageData[strageCol[i]] = strageData[i];
+        };
+        // const tmpDb = push(dbStrage);
+        // set(tmpDb, inputStrageData); 
+
+        // カラムの表示
+        let tableContent = '<tr>';
+        for(let i = 0; i < tranCol.length; i++){
+            tableContent += `<th>${tranCol[i]}</th>`
+        }
+        tableContent += '</tr>';
+
+        $("#transactions-table").html(tableContent)
+
+        
+        
+        // 取引・倉庫テーブル　データベースからの読み込みに時間がかかる為
+        // 取引
+        let tmpTransactionTableContent = [];
+            onChildAdded(dbTransaction, (obj) => {
+            let data = obj.val();
+            tmpTransactionTableContent.push(data);
+            });
+        
+        // 倉庫
+        let tmpStrageTableContent = [];
+            onChildAdded(dbStrage, (obj) => {
+            let data = obj.val();
+            tmpStrageTableContent.push(data);
+            });
+
+        setTimeout(function(){
+            // 取引テーブルの作成
+            let tableContent = '<tr>';
+            for(let i = 0; i < tranCol.length; i++){
+                tableContent += `<th>${tranCol[i]}</th>`
+            }
+            tableContent += '</tr>';
+
+            for(let j = 0; j < tmpTransactionTableContent.length; j++){
+                tableContent += '<tr>';    
+                for(let i = 0; i < tranCol.length; i++){
+                    tableContent += `<td>${tmpTransactionTableContent[j][tranCol[i]]}</td>`
+                }
+                tableContent += '</tr>';
+            }
+
+            $("#transactions-table").html(tableContent)
+
+            // キャパシティテーブルへの反映
+            
+            let today = new Date();     
+                   
+            let purchaseTableContent = [];
+            let storeTableContent = [];
+            let soldTableContent = [];
+            let tmpTable;
+
+            for(let i = 0; i < tmpTransactionTableContent.length; i++){
+                let etd = new Date(tmpTransactionTableContent[i]['ETD']);
+                let eta = new Date(tmpTransactionTableContent[i]['ETA']);
+                
+                if(etd.getTime() > today.getTime()){
+                    tmpTable = purchaseTableContent;
+                }else if(etd.getTime() <= today.getTime() && eta.getTime() >= today.getTime()){
+                    tmpTable = storeTableContent;
+                } else if(eta.getTime() < today.getTime()){
+                    tmpTable = soldTableContent;
+                }
+                
+                let flag = -1;
+                for(let j = 0; j < tmpTable.length; j++){
+                    if(tmpTable[j][0] == tmpTransactionTableContent[i]['商品'] && tmpTable[j][1] == tmpTransactionTableContent[i]['規格']){
+                        flag = j;    
+                    }
+                }
+
+                // 新規登録
+                if(flag == -1){
+                    tmpTable.push([tmpTransactionTableContent[i]['商品'], tmpTransactionTableContent[i]['規格'], Number(tmpTransactionTableContent[i]['数量']), tmpTransactionTableContent[i]['ETD'], tmpTransactionTableContent[i]['ETA'],tmpTransactionTableContent[i]['単位']]); //単位の違いによる変換は実装しない
+                }
+                // 既存　数量の追加
+                else{
+                    tmpTable[flag][2] += Number(tmpTransactionTableContent[i]['数量']);
+                }                
+            }
+
+            // 倉庫キャパシティ表示
+            let strageTableContent =[];
+            for(let i = 0; i < tmpStrageTableContent.length; i++){
+                    
+                let flag = -1;
+                for(let j = 0; j < strageTableContent.length; j++){
+                    if(strageTableContent[j][0] == tmpStrageTableContent[i]['商品'] && strageTableContent[j][1] == tmpStrageTableContent[i]['規格']){
+                        flag = j;    
+                    }
+                }
+
+                // 新規登録
+                if(flag == -1){
+                    strageTableContent.push([tmpStrageTableContent[i]['商品'], tmpStrageTableContent[i]['規格'], Number(tmpStrageTableContent[i]['容量']),0, 0, tmpStrageTableContent[i]['単位']]); //単位の違いによる変換は実装しない
+                }
+                // 既存　数量の追加
+                else{
+                    strageTableContent[flag][2] += Number(tmpStrageTableContent[i]['容量']);
+                }                
+            };
+
+            // 倉庫使用率の追加
+            for(let i = 0; i < strageTableContent.length; i++){
+                for(let j = 0; j < storeTableContent.length; j++){
+                    if(strageTableContent[i][0] == storeTableContent[j][0] && strageTableContent[i][1] == storeTableContent[j][1]){
+                        strageTableContent[i][3] += storeTableContent[j][2];
+                    };
+                };
+
+                // 使用率の％表示
+                strageTableContent[i][4] = strageTableContent[i][3] / strageTableContent[i][2] * 100;
+
+            }
+            console.log(strageTableContent)
+
+            // HTMLに表示
+            // 受け渡し前
+            tableContent = "";
+            for(let i = 0; i < purchaseTableContent.length; i++){
+                tableContent += '<tr>';
+                tableContent += `<th>${purchaseTableContent[i][0]}</th>`
+                tableContent += `<th>${purchaseTableContent[i][1]}</th>`
+                tableContent += `<td>${purchaseTableContent[i][2]}</td>`
+                tableContent += `<td>${purchaseTableContent[i][5]}</td>`
+                tableContent += '</tr>';
+            }
+
+            $("#purchase-table").html(tableContent)
+
+            // 倉庫中
+            tableContent = "";
+            for(let i = 0; i < strageTableContent.length; i++){
+                tableContent += '<tr>';
+                tableContent += `<th>${strageTableContent[i][0]}</th>`
+                tableContent += `<th>${strageTableContent[i][1]}</th>`
+                tableContent += `<td>${strageTableContent[i][3]}</td>`
+                tableContent += `<td>${strageTableContent[i][5]}</td>`
+                tableContent += `<td>${strageTableContent[i][4]}</td>`
+                tableContent += `<td>%</td>`
+                tableContent += '</tr>';
+            }
+
+            $("#capacity-table").html(tableContent)
+
+            //  受け渡し後
+            tableContent = "";
+            for(let i = 0; i < soldTableContent.length; i++){
+                tableContent += '<tr>';
+                tableContent += `<th>${soldTableContent[i][0]}</th>`
+                tableContent += `<th>${soldTableContent[i][1]}</th>`
+                tableContent += `<td>${soldTableContent[i][2]}</td>`
+                tableContent += `<td>${soldTableContent[i][5]}</td>`
+                tableContent += '</tr>';
+            }
+
+            $("#sell-table").html(tableContent)
+
+        },1500);
+
+
+        //シミュレーション
+        // シミュレーション数の選択肢を表示
+        let selNum = '';
+        for(let i =1; i<2; i++){
+            selNum += `<option value=${i}>${i}</option>`;
+        };
+        $("#simNum").html(selNum);
+
+        //初期の表示設定
+        let inputBoxes ="<ul><li>商品</li><li>規格</li><li>数量</li><li>ETD</li><li>ETA</li></ul>";
+        inputBoxes += `<ul>
+                <li>
+                    <select class="simulation-input" id="product${0}">
+                    <option value=xxx>xxx</option>
+                    <option value=yyy>yyy</option>
+                    </select>
+                
+                </li>
+
+                <li>
+                    <select class="simulation-input" id="grade${0}">
+                    <option value=A>A</option>
+                    <option value=B>B</option>
+                    </select>
+                
+                </li>
+                <li><input type="text" class="simulation-input" id="amount${0}"></li>
+                <li><input type="date" class="simulation-input" id="etd${0}"></li>
+                <li><input type="date" class="simulation-input" id="eta${0}"></li>
+            </ul>`
+        $("#input-container").html(inputBoxes)
+
+        // 入力数が選択された場合
+        $("#simNum").change(() => {
+            let inputBoxes ="<ul><li>商品</li><li>規格</li><li>数量</li><li>ETD</li><li>ETA</li></ul>";
+            for(let i = 0; i < $("#simNum").val(); i++){
+                inputBoxes += 
+                `<ul>
+                <li>
+                    <select class="simulation-input" id="product${0}">
+                    <option value=xxx>xxx</option>
+                    <option value=yyy>yyy</option>
+                    </select>
+                
+                </li>
+
+                <li>
+                    <select class="simulation-input" id="grade${0}">
+                    <option value=A>A</option>
+                    <option value=B>B</option>
+                    </select>
+                
+                </li>
+                <li><input type="text" class="simulation-input" id="amount${0}"></li>
+                <li><input type="date" class="simulation-input" id="etd${0}"></li>
+                <li><input type="date" class="simulation-input" id="eta${0}"></li>
+            </ul>`
+
+            $("#input-container").html(inputBoxes)
+        }
+        })
+
+        // シミュレーションの実行
+        $("#exeSim").on("click", () => {
+
+            //入力項目のエラーチェック
+            let numSim = $('#simNum').val();  //シミュレーション数
+
+            let flag = true;
+            // 空欄チェック
+            for(let i = 0; i < numSim; i++){
+                if($(`#prduct${i}`).val() == "" || 
+                $(`#grade${i}`).val() == "" || 
+                $(`#amount${i}`).val() == "" || 
+                $(`#etd${i}`).val() == "" || 
+                $(`#eta${i}`).val() == "" ){
+                    alert("空白の入力項目があります。すべて埋めた上、再実行してください。");
+                    flag = false;
+                    break;
+                }
+            }
+
+            // 時系列チェック
+            for(let i = 0; i < numSim; i++){
+                if(
+                new Date($(`#etd${i}`).val()).getTime() >= 
+                new Date($(`#eta${i}`).val()).getTime() ){
+                    alert("ETAをETDより後の日付で指定してください。");
+                    flag = false;
+                    break;
+                }
+            }
+
+            // 数値チェック
+            // for(let i = 0; i < numSim; i++){
+            //     let toNumAmount = Number($(`#amount${i}`).val());
+            //     if(
+            //       isNaN(toNumAmount)){
+            //         alert("数量には数字を記載してください。");
+            //         flag = false;
+            //         break;
+            //     }
+            // }
+
+            //  処理
+            if(flag){
+                console.log(tmpTransactionTableContent)
+
+                // 仮想取引テーブル
+                let simTransactionTable = [];
+
+                for(let i = 0; i < tmpTransactionTableContent.length; i++){
+                    simTransactionTable.push([tmpTransactionTableContent[i]['商品'],tmpTransactionTableContent[i]['規格'],Number(tmpTransactionTableContent[i]['数量']),tmpTransactionTableContent[i]['ETD'], tmpTransactionTableContent[i]['ETA'], 0])
+                }
+
+                for(let i = 0; i < numSim; i++){
+                    simTransactionTable.push([$(`#product${i}`).val(),$(`#grade${i}`).val(), Number($(`#amount${i}`).val()), $(`#etd${i}`).val(),$(`#eta${i}`).val(),1]);
+                }
+//開発用　仮想テーブルから入力分を消す
+// simTransactionTable.pop()
+// console.log(simTransactionTable)
+
+                //倉庫への割り当て
+                let minETD = new Date(2100, 1, 1); 
+                let maxETA = new Date(1900, 1, 1);
+                for(let i = 0; i < simTransactionTable.length; i++){
+                    let tmpETD = new Date(simTransactionTable[i][3]);
+                    if(minETD.getTime() > tmpETD.getTime()){
+                        minETD = tmpETD;
+                    }
+
+                    let tmpETA = new Date(simTransactionTable[i][4]);
+                    if(maxETA.getTime() < tmpETA.getTime()){
+                        maxETA = tmpETA;
+                    }
+                }
+
+                minETD = new Date(minETD.setDate(minETD.getDate() - 2))
+                maxETA = new Date(maxETA.setDate(maxETA.getDate() + 2))
+
+
+                //日付テーブルの作成
+                let genDateTable = (minETD, maxETA, tmpStrageTableContent) => {
+                    let diff = (maxETA.getTime() - minETD.getTime())/ (24*60*60*1000);
+
+                    let dateTable = [];
+                    for(let i = 0; i < diff; i++){
+                        let tmpDate = minETD.setDate(minETD.getDate() + 1);
+                        // let cell = {"date" : new Date(tmpDate)};
+                        //     for(let j = 0; j < tmpStrageTableContent.length; j++){
+                        //         cell[tmpStrageTableContent[j]["倉庫"] + '/' +tmpStrageTableContent[j]["規格"]] = 0;
+                        //     }
+                        // dateTable.push(cell);
+
+                        let cell = [new Date(tmpDate)];
+                            for(let j = 0; j < tmpStrageTableContent.length; j++){
+                                cell.push(0);
+                            }
+                        dateTable.push(cell);
+                    }
+
+                    let dateTableLabels = [];
+                    dateTableLabels.push("date")
+                    for(let j = 0; j < tmpStrageTableContent.length; j++){
+                        dateTableLabels.push(tmpStrageTableContent[j]["倉庫"] + '/' +tmpStrageTableContent[j]["規格"]);
+                    }
+
+                    return {"table" : dateTable, "label" : dateTableLabels};
+
+                }  
+                
+                // let genDateTable = (minETD, maxETA, tmpStrageTableContent, numPattern) => {
+                //     let diff = (maxETA.getTime() - minETD.getTime())/ (24*60*60*1000);
+
+                //     let dateTable = [];
+                //     for(let i = 0; i < diff; i++){
+                //         let tmpDate = minETD.setDate(minETD.getDate() + 1);
+                //         let cell = {"date" : new Date(tmpDate)};
+                //             for(let j = 0; j < tmpStrageTableContent.length; j++){
+                //                 cell[tmpStrageTableContent[j]["倉庫"] + '/' +tmpStrageTableContent[j]["規格"]] = 0;
+                //             }
+                //         dateTable.push(cell);
+
+                //         // let cell = [new Date(tmpDate)];
+                //         //     for(let j = 0; j < tmpStrageTableContent.length; j++){
+                //         //         cell.push(0);
+                //         //     }
+                //         // dateTable.push(cell);
+                //     }
+
+                //     let dateTables = {};
+                //     for(let j = 0; j < numPattern; j++){
+                //         dateTables[j] = dateTable;
+                //     }
+
+                //     return dateTables;
+
+                // }  
+
+  
+
+
+                // 在庫の記録
+                let candStrage = [];
+                for(let i =0; i < tmpStrageTableContent.length; i++){
+                    for(let j = 0; j < simTransactionTable.length; j++){
+                        candStrage.push(i);    
+                    }
+                }
+
+                let pattern = permutation(candStrage, simTransactionTable.length)
+                let delPattern = deleteDuplicate2D(pattern);
+
+                // 商品名・規格が一致した取引と倉庫の組み合わせ
+                let approved = [];
+                for(let i = 0; i < delPattern.length; i++){
+                    let counter = 0;
+                    for(let j = 0; j < delPattern[i].length; j++){
+                        if(tmpStrageTableContent[delPattern[i][j]]["商品"] == simTransactionTable[j][0] &&
+                        tmpStrageTableContent[delPattern[i][j]]["規格"] == simTransactionTable[j][1] ){
+                            counter += 1;
+                        }
+                    }
+                    if(counter == delPattern[i].length){
+                        approved.push(delPattern[i])
+                    }
+                }
+
+                // 日付テーブルに使用率を反映
+                // let simCapacityPattern = [];
+                // for(let i =0; i < approved.length; i++){
+                //     simCapacityPattern.push(genDateTable(minETD, maxETA, tmpStrageTableContent)["table"]);
+                // };
+                // console.log(simCapacityPattern)
+
+                
+
+                // for(let j = 0; j < approved.length; j++){
+                let patternDateTable = genDateTable(minETD, maxETA, tmpStrageTableContent)["table"];
+                let patternDateLabel = genDateTable(minETD, maxETA, tmpStrageTableContent)["label"];
+
+                for(let j = 0; j < 1; j++){
+
+                    // 各パターンに対して実行
+                    // let patternDateTable = genDateTable(minETD, maxETA, tmpStrageTableContent)["table"];
+            console.log(patternDateTable)
+                    let pattern = approved[j];
+                    for(let m = 0; m < pattern.length; m++){
+                        // 各取引と倉庫の組み合わせに対して実行
+                        let strage = tmpStrageTableContent[pattern[m]];
+                        let transaction = simTransactionTable[m];
+
+                        for(let i = 0; i < patternDateTable.length; i++){
+                            //各日付に対して実行
+                            if(new Date(transaction[3]).getTime() <= patternDateTable[i][0].getTime() &&
+                            new Date(transaction[4]).getTime() >= patternDateTable[i][0].getTime()){
+                                let keyStrage = strage["倉庫"] + '/' + strage["規格"]; 
+                                //使用量を入力
+                                // console.log(patternDateTable[i][1 + pattern[m]])
+                                patternDateTable[i][1 + pattern[m]] += transaction[2];
+                                // console.log(patternDateTable[i][1 + pattern[m]])
+                            }
+                        }
+                    }
+
+                    // 出力・表示
+                    // simCapacityPattern.push(patternDateTable);
+
+                    console.log(patternDateTable[0][0].getFullYear())
+                    console.log(patternDateTable[0][0].getMonth())
+                    console.log(patternDateTable[0][0].getDate())
+
+
+                    
+                    // let output = "<tr>";
+                    // for(let i = 0; i < patternDateLabel.length; i++){
+                    //     output += `<th>${patternDateLabel[i]}</th>`
+                    // }
+                    // output += '</tr>'
+
+
+
+
+                    // for(let i = 0; i < patternDateTable.length; i++){
+                    //     output += '<tr>'
+                    //     for(let j = 0; j < patternDateTable[i].length; j++){
+                    //         if(j == 0){
+                    //             output += `<td>${[patternDateTable[i][j].getFullYear(), patternDateTable[i][j].getMonth(), patternDateTable[i][j].getDate()].join("/")}</td>`
+                    //         } else{
+                    //             output += `<td>${patternDateTable[i][j]}</td>`
+                    //         }
+                    //     }
+                    //     output += '</tr>'
+                    // }
+                    console.log(patternDateLabel.length)
+                    console.log(tmpStrageTableContent)
+                    
+
+                    let output = "";
+                    for(let i = 0; i < patternDateLabel.length; i++){
+                        output += "<tr>";
+                        output += `<th>${patternDateLabel[i]}</th>`
+
+                        for(let j = 0; j < patternDateTable.length; j++){
+                            if(i == 0){
+                                output += `<td>${[patternDateTable[j][i].getFullYear(), 1 + patternDateTable[j][i].getMonth(), patternDateTable[j][i].getDate()].join("/")}</td>`
+                            } else{
+                                let par = Math.floor(patternDateTable[j][i] / tmpStrageTableContent[i - 1]["容量"] * 100)
+                                
+                                if(par > 100){
+                                    output += `<td style="background-color: yellow;"> <font color="red"> ${par} % </font> </td>`
+                                } else {
+                                    output += `<td>${par} % </td>`
+                                }
+                            }
+
+                        }
+
+                        output += '</tr>'
+                    }
+
+
+                    $("#result-container").html(
+                        output
+                    )
+
+
+
+
+                }
+
+                // console.log(simCapacityPattern)
+
+
+                // console.log(new Date(simTransactionTable[0][3]).getTime() == dateTable[1].date.getTime())
+
+
+                console.log(tmpStrageTableContent)
+                console.log(simTransactionTable)
+                console.log(approved)
+
+                
+
+
+              
+
+        };
+    })
+
+
+
+
+        // 順列
+        const permutation = (nums, k) => {
+            let ans = []
+            if (nums.length < k) {
+                return []
+            }
+            if (k === 1) {
+                for (let i = 0; i < nums.length; i++) {
+                    ans[i] = [nums[i]]
+                }
+            } else {
+                for (let i = 0; i < nums.length; i++) {
+                    let parts = nums.slice(0)
+                    parts.splice(i, 1)[0]
+                    let row = permutation(parts, k - 1)
+                    for (let j = 0; j < row.length; j++) {
+                        ans.push([nums[i]].concat(row[j]))
+                    }
+                }
+            }
+            return ans;
+        }
+
+        // 組み合わせ
+        const combination = (nums, k) => {
+            let ans = [];
+            if (nums.length < k) {
+                return []
+            }
+            if (k === 1) {
+                for (let i = 0; i < nums.length; i++) {
+                    ans[i] = [nums[i]];
+                }
+            } else {
+                for (let i = 0; i < nums.length - k + 1; i++) {
+                    let row = combination(nums.slice(i + 1), k - 1);
+                    for (let j = 0; j < row.length; j++) {
+                        ans.push([nums[i]].concat(row[j]));
+                    }
+                }
+            }
+            return ans;
+        }
+
+        // 二次元配列（number）の重複要素配列削除関数
+        let deleteDuplicate2D = (arr) => {
+        
+            // 重複削除用文字列配列の初期化
+            let strArr = []
+            for(let i = 0; i < arr.length; i++){
+                strArr.push("")
+            }
+
+            //  要素配列の文字列化
+            for(let i = 0; i < arr.length; i++){
+                for(let elm of arr[i]){
+                    strArr[i] += String(elm);
+                }
+            }
+
+            //  重複の削除
+            let delArr = Array.from(new Set(strArr))
+
+            // 文字列から元配列に戻す
+            let newArr = [];
+            for(let elm of delArr){
+                newArr.push(elm.split("").map(x => Number(x)))
+            }
+
+            return newArr;
+        }
+        
+
+
+
+
+        // ナビゲーション
+        "use strict";
+        $(function () {
+        const hamburger = $(".hamburger");
+        const nav = $(".nav");
+
+        hamburger.click(function () {
+            $(this).find(".hamburger_bar").toggleClass("is_active");
+            nav.toggleClass("is_active");
+        });
+        });
+
+        
+
+        // New RSS feed
+        $(document).ready(function () {
+            $.ajax({
+            type: "get",
+            url: "sample.xml"
+            }).done(function(result) {
+            $(result).find("item").each(function() {
+            $(".XMLSampleRequest").append(
+                
+            `<div class="card">
+                ${$(this).find('pubDate').text()} &nbsp;&nbsp;
+
+                ${$(this).find('title').text()} &nbsp;&nbsp;
+                
+                <a href="${$(this).find('link').text()}">LINK</a>
+            </div>`
+            
+            );
+            });
+            });
+        });
+        
+        
+        
+
+        //　ステータス
+        // 購入
+
+const arr = [1 ,2 ,3 ,4]
+let arr2 = []
+
+for(let i =0; i<arr.length; i++){
+    arr2.push(arr)
+}
+arr2 = [arr, arr]
+
+console.log(arr2)
+
+let xx = arr2[0][1]
+xx += 12
+arr2[0].splice(1, 1, xx)
+arr2[1].splice(1, 1, 10)
+
+
+
+
+console.log(arr2)
+
+console.log(arr2[0][0])
+
+let xxx = function arr() {
+    return [1 ,2 ,3 ,4]
+}
+
+let arr3 = []
+for(let i =0; i<arr.length; i++){
+    arr3.push(xxx())
+}
+
+arr3[0][0] = 10
+console.log(arr3)
+
+
+
+
+
+    </script>
+
+</body>
+</html>

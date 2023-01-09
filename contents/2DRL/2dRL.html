@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        #cart-pole-canvas {
+            border : 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="cart-pole-canvas" height="150px" width="500px"></canvas>
+    
+    <div>
+        <span id="iteration-info"></span>
+        <span>:</span>
+
+        <span id="game-info"></span>
+        <span>:</span>
+        <span id="step-info"></span>
+    </div>
+
+    <div>
+        <span class="status-span">訓練のスピード：</span>
+        <span id="train-speed" class="status-span"></span>
+    </div>
+
+    <div >
+      <canvas id="chartCanvas" class="graph-area" width="1000px" height="500px"></canvas>
+    </div>
+
+    <div>
+      <img src="./textures/カートポール学習結果.png" alt="">
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1"></script>
+
+    <script src="./src/render.js"></script>
+    <script src="./src/ui.js"></script>
+    <script src="./src/CartPole.js"></script>
+    <script src="./src/utils.js"></script>
+    <script src="./src/index.js"></script>
+
+    <script src="./src/chart.js"></script>
+
+
+    <script type="module">
+        import lineChart from './src/chart.js' 
+
+    document.addEventListener('DOMContentLoaded',async()=>{
+      let data = [];
+      let label = "カートポール強化学習過程";
+      let labels = [];
+      
+      const chart = new lineChart("chartCanvas", labels, data, label);
+
+      const gameInfo = document.getElementById('game-info');
+      const stepInfo = document.getElementById('step-info');
+
+      // 追加
+      const iterationInfo = document.getElementById('iteration-info');
+
+
+      let currentActions_;
+
+      const buildModel =()=>{
+        const model = tf.sequential();
+        model.add(tf.layers.dense({units: 4, activation: 'elu', inputShape: [4]}));
+        model.add(tf.layers.dense({ units: 1 }));
+        model.summary();
+        return model;
+      }
+
+      const getLogitsAndActions=(inputs)=>{
+        return tf.tidy(() => {
+          const logits = model.predict(inputs);
+          const leftProb = tf.sigmoid(logits);
+          const rightProb = tf.sub(1, leftProb)
+          const leftRightProbs = tf.concat([leftProb, rightProb],1);
+          const actions = tf.multinomial(leftRightProbs, 1, null, true);
+          return [logits, actions];
+        });
+      }
+
+      //
+      const getGradientsAndSaveActions=(inputTensor)=>{
+        const f = () => tf.tidy(() => {
+          const [logits, actions] = getLogitsAndActions(inputTensor);
+          currentActions_ = actions.dataSync();
+        const labels = tf.sub(1, tf.tensor2d(currentActions_, actions.shape,'float32'));
+
+        return tf.losses.sigmoidCrossEntropy(labels, logits).asScalar();
+
+        });
+        return tf.variableGrads(f);
+      }
+
+      const pushGradients = (record, gradients)=> {
+        for (const key in gradients) {
+          if (key in record) {
+            record[key].push(gradients[key]);
+          } else {
+            record[key] = [gradients[key]];
+          }
+        }
+      }
+
+       
+            
+
+const maxStepsPerGame = 500;
+const numGames = 20;
+
+const cartPoleSystem = new CartPole(true);
+const model = buildModel();
+
+// const allGradients = [];
+// const allRewards = [];
+//const gameSteps = [];
+
+const learningRate = 0.05;
+const optimizer = tf.train.adam(learningRate);
+const discountRate = 0.95;
+
+// 訓練を繰り返す回数
+const trainIterations = 10000;
+// 開始時刻
+let t0 = new Date().getTime();
+// 総学習回数
+let xstep = 0;
+
+for (let l = 0; l < trainIterations; ++l) {
+  //
+  const allGradients = [];
+  const allRewards = [];
+  const gameSteps = [];
+  //
+  let maxStemNum = 0;
+
+  iterationInfo.textContent = 1+l + '回めの繰り返し';
+
+  for (let i = 0; i < numGames; ++i) {
+
+    gameInfo.textContent = i + 1 +'回めのゲーム';
+    cartPoleSystem.setRandomState();
+    const gameRewards = [];
+    const gameGradients = [];
+
+    for (let j = 0; j < maxStepsPerGame; ++j) {
+      stepInfo.textContent = j + 1 +'回めのステップ';
+
+      const gradients = tf.tidy(() => {
+        const inputTensor = cartPoleSystem.getStateTensor();
+        const {value, grads} = getGradientsAndSaveActions(inputTensor);
+        return grads;
+      });
+
+      pushGradients(gameGradients, gradients);
+      const action = currentActions_[0];
+      const isDone = cartPoleSystem.update(action);
+      await maybeRenderDuringTraining(cartPoleSystem);
+
+      if (isDone) {
+        gameRewards.push(0);
+        break;
+      } else {
+        gameRewards.push(1);
+      }
+
+      //
+      xstep++;
+      maxStemNum = j;
+
+
+
+    } // 内側のループの終わり
+
+    //
+    // plot(xstep, maxStemNum);
+    chart.addData(xstep, maxStemNum);
+
+    gameSteps.push(gameRewards.length);
+    pushGradients(allGradients, gameGradients);
+    allRewards.push(gameRewards);
+
+
+    tf.tidy(() => {
+      const normalizedRewards = discountAndNormalizeRewards(allRewards, discountRate);
+      const gradients = scaleAndAverageGradients(allGradients, normalizedRewards);
+      optimizer.applyGradients(gradients);
+    });
+  } // 外側のループの終わり
+
+  tf.dispose(allGradients);
+  // [訓練のスピード]の表示
+  const t1 = new Date().getTime();
+  const stepsPerSecond = sum(gameSteps) / ((t1 - t0) / 1e3);
+  t0 = t1;
+  const trainSpeed = document.getElementById('train-speed').textContent = `${stepsPerSecond.toFixed(1)} steps/s`
+  await tf.nextFrame();
+} // 一番外のループの終わり
+}, false);
+
+
+
+
+
+    </script>
+
+</body>
+</html>

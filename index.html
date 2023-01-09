@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOSHA-MAN</title>
+
+    <style>
+        body {
+          margin: 0;
+          width: 100vw;
+          height: 100vh;
+          overflow: hidden;
+          /* display: flex; */
+          justify-content: center;
+          align-items: center;
+          /* background: black; */
+        }
+        #startButton {
+          background: white;
+          font-size: 32px;
+          color: black;
+          border-radius: 10px;
+          cursor: pointer;
+          padding: 10px;
+        }
+        .exp-container{
+          margin-right: auto;
+          margin-left: auto;
+          width: auto;
+          height: 256px;
+          border: black 5px;
+        }
+
+        .exp{
+          padding: 5px;
+          border: double 5px;
+        }
+          </style>
+</head>
+
+<body>
+    <script src="./src/three.js"></script>
+    <script src="./src/ammo.js"></script>
+    <script type="module" src="./main.js"></script> 
+    <script src="https://unpkg.com/three@0.137.4/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://unpkg.com/three@0.137.4/examples/js/loaders/ColladaLoader.js"></script> 
+    <script src="https://unpkg.com/three@0.137.4/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+
+    <div id="startButton">Click to start</div>
+    <div class="exp-container">
+      <div class="exp" id="exp">
+        「Click to start」をクリックすると次の画面に遷移します。
+      </div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+
+</body>
+</html>
